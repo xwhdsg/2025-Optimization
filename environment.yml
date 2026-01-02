@@ -1,0 +1,15 @@
+name: opt-mini
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - tqdm
+  - cvxpy
+  - scikit-learn
+  - pip
+  - pip:
+      - torch
