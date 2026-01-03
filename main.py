@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from pathlib import Path
+import json
 
 try:
     import cvxpy as cp
@@ -201,6 +202,49 @@ if __name__ == "__main__":
     print(f"AdaGrad 完成 - 总运行时间: {runtime_adagrad:.2f}s")
     print(f"AdaGrad 最终累计遗憾: {reg_adagrad[-1]:.2f}, 平均遗憾: {avg_adagrad[-1]:.4f}")
 
+    # ==================== 创建 results/ 目录并保存结果 ====================
+
+    results_dir = Path("results")
+    results_dir.mkdir(exist_ok=True)
+
+    # 1. 保存关键数值结果为 JSON（便于阅读和报告引用）
+    summary = {
+        "offline_optimal_loss": float(min_cum_loss),
+        "OGD": {
+            "final_cumulative_regret": float(reg_ogd[-1]),
+            "final_average_regret": float(avg_ogd[-1]),
+            "runtime_s": float(runtime_ogd)
+        },
+        "FTRL": {
+            "final_cumulative_regret": float(reg_ftrl[-1]),
+            "final_average_regret": float(avg_ftrl[-1]),
+            "runtime_s": float(runtime_ftrl)
+        },
+        "AdaGrad": {
+            "final_cumulative_regret": float(reg_adagrad[-1]),
+            "final_average_regret": float(avg_adagrad[-1]),
+            "runtime_s": float(runtime_adagrad)
+        }
+    }
+
+    summary_path = results_dir / "summary.json"
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=4, ensure_ascii=False)
+    print(f"关键结果已保存至: {summary_path}")
+
+    # 2. 保存完整 Regret 曲线数据为 npz（便于后续统计多轮运行）
+    curves_path = results_dir / "regret_curves.npz"
+    np.savez(curves_path,
+             t=np.arange(1, 5001),
+             regret_ogd=reg_ogd,
+             regret_ftrl=reg_ftrl,
+             regret_adagrad=reg_adagrad,
+             avg_regret_ogd=avg_ogd,
+             avg_regret_ftrl=avg_ftrl,
+             avg_regret_adagrad=avg_adagrad)
+    print(f"完整遗憾曲线数据已保存至: {curves_path}")
+
+    # ==================== 创建 figures/ 目录并保存结果 ====================
     # 创建输出目录
     Path("figures").mkdir(exist_ok=True)
 

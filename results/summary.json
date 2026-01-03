@@ -1,0 +1,18 @@
+{
+    "offline_optimal_loss": 786.5290859048225,
+    "OGD": {
+        "final_cumulative_regret": 531.2223768902675,
+        "final_average_regret": 0.1062444753780535,
+        "runtime_s": 0.04149746894836426
+    },
+    "FTRL": {
+        "final_cumulative_regret": 347.0066090054929,
+        "final_average_regret": 0.06940132180109858,
+        "runtime_s": 0.040714263916015625
+    },
+    "AdaGrad": {
+        "final_cumulative_regret": 329.5308863528444,
+        "final_average_regret": 0.06590617727056888,
+        "runtime_s": 0.05327749252319336
+    }
+}
